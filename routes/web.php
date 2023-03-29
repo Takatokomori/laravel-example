@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BlogController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +20,8 @@ Route::get('/', function () {
     // return view('welcome');
     return view('top');
 })->name("top");
+
+Route::get("blogs", [BlogController::class, "showList"])->name("blogs");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
