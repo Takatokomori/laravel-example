@@ -11,9 +11,15 @@
                 <th>記事番号</th>
                 <th>タイトル</th>
                 <th>日付</th>
-                <th></th>
-                <th></th>
+                <th>作成日</th>
             </tr>
+            @foreach($blogs as $blog)
+            <tr>
+                <td>{{ $blog->id }}</td>
+                <td><a href="/blog/{{ $blog->id }}">{{ $blog->title }}</a></td>
+                <td>{{ $blog->created }}</td>
+            </tr>
+            @endforeach
         </table>
     </div>
 </div>

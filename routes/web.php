@@ -21,7 +21,9 @@ Route::get('/', function () {
     return view('top');
 })->name("top");
 
+// blog
 Route::get("blogs", [BlogController::class, "showList"])->name("blogs");
+Route::get("blog/{id}", [BlogController::class, "showDetail"])->name("show");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
