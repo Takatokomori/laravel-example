@@ -1,6 +1,11 @@
-<div class="row">
-    <div class="col-md-10 col-md-offset-2">
-        <h2>ブログ記事一覧</h2>
+<x-app-layout>
+    <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 bg-white dark:bg-gray-800">
+    <h2>ブログ記事一覧</h2>
+    <h3>
+        <x-nav-link :href="route('blog.create')" :active="request()->routeIs('blog/create')">
+           {{ __('Blogs') }}
+        </x-nav-link>
+    </h3>
         @if (session('err_msg'))
             <p class="text-danger">
                 {{ session('err_msg') }}
@@ -22,4 +27,4 @@
             @endforeach
         </table>
     </div>
-</div>
+</x-app-layout>

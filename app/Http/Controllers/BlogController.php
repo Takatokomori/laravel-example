@@ -33,4 +33,25 @@ class BlogController extends Controller
         }
         return view("blog.detail", compact("blog"));
     }
+
+    /**
+     * show Blog create form
+     * 
+     * @return view
+     */
+    public function showCreate()
+    {
+        return view("blog.form");
+    }
+
+    /**
+     * show Blog create form
+     * 
+     * @return view
+     */
+    public function store()
+    {
+        \Session::flash("err_msg", "We saved the blog");
+        return redirect(route("blogs"));
+    }
 }

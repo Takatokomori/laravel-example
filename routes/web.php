@@ -23,7 +23,9 @@ Route::get('/', function () {
 
 // blog
 Route::get("blogs", [BlogController::class, "showList"])->name("blogs");
-Route::get("blog/{id}", [BlogController::class, "showDetail"])->name("show");
+Route::get("blog/create", [BlogController::class, "showCreate"])->name("blog.create");
+Route::post("blog/store", [BlogController::class, "store"])->name("blog.store");
+Route::get("blog/{id}", [BlogController::class, "showDetail"])->name("blog.show");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
