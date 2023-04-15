@@ -64,8 +64,7 @@ class BlogController extends Controller
     public function update(BlogRequest $request, Blog $blog)
     {
         $input = $request->all();
-        dd($input);
-        $blog->update();
+        $blog->update($input);
         return redirect(route("blogs.index"));
     }
 
