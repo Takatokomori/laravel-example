@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use App\Http\Requests\BlogRequest;
 
 class BlogController extends Controller
 {
@@ -39,7 +40,7 @@ class BlogController extends Controller
      * 
      * @return view
      */
-    public function showCreate()
+    public function create()
     {
         return view("blog.form");
     }
@@ -49,8 +50,19 @@ class BlogController extends Controller
      * 
      * @return view
      */
-    public function store()
+    public function store(BlogRequest $request)
     {
+        $input = $request->all();
+
+        \DB::beginTransaction();
+        try{
+            Blog::create($input);
+            \DB::commit();
+        }
+        catch(\Thorwable $e){
+            \DB::rollback();
+            abort(500);
+        }
         \Session::flash("err_msg", "We saved the blog");
         return redirect(route("blogs"));
     }
