@@ -13,9 +13,11 @@
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
                             <div>
+                                <x-dropdown-link :href="route('blogs.show', $blog->id)">
                                 <span class="text-gray-800">{{ $blog->id }}</span>
                                 <span class="text-gray-800">{{ $blog->title }}</span>
                                 <small class="ml-2 text-sm text-gray-600">{{ $blog->created_at->format('j M Y, g:i a') }}</small>
+                                </x-dropdown-link>
                             </div>
                             <x-dropdown>
                                     <x-slot name="trigger">

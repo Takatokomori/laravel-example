@@ -23,8 +23,8 @@ Route::get('/', function () {
 
 // Blog
 Route::resource("blogs", BlogController::class)
-    ->only(["index", "store", "edit",
-            "update", "destroy"]);
+    ->only(["index", "store", "show",
+            "edit","update", "destroy"]);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
