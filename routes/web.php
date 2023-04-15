@@ -21,11 +21,9 @@ Route::get('/', function () {
     return view('top');
 })->name("top");
 
-// blog
-Route::get("blogs", [BlogController::class, "showList"])->name("blogs");
-Route::get("blog/create", [BlogController::class, "create"])->name("blog.create");
-Route::post("blog/store", [BlogController::class, "store"])->name("blog.store");
-Route::get("blog/{id}", [BlogController::class, "showDetail"])->name("blog.show");
+// Blog
+Route::resource("blogs", BlogController::class)
+    ->only(["index", "store", "edit", "update", "destroy"]);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
