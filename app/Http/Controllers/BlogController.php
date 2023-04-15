@@ -21,6 +21,12 @@ class BlogController extends Controller
         return view("blogs.index", compact("blogs"));
     }
 
+    public function show(int $id): View
+    {
+        $blog = Blog::findOrFail($id);
+        return view("blogs.show", compact("blog"));
+    }
+
     /**
      * store input form
      * 
@@ -64,7 +70,7 @@ class BlogController extends Controller
     public function update(BlogRequest $request, Blog $blog)
     {
         $input = $request->all();
-        $blog->update($input);
+        $blog->save($input);
         return redirect(route("blogs.index"));
     }
 
