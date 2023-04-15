@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use App\Models\Blog;
 use App\Http\Requests\BlogRequest;
 
@@ -13,33 +15,18 @@ class BlogController extends Controller
      * 
      * @return view
      */
-    public function index()
+    public function index(): View
     {
         $blogs = Blog::all();
-        return view("blog.list", compact("blogs"));
+        return view("blogs.index", compact("blogs"));
     }
 
     /**
-     * show Blog detail
+     * store input form
      * 
      * @return view
      */
-    public function edit($id)
-    {
-        $blog = Blog::find($id);
-        if(is_null($blog))
-        {
-            \Session::flash("err_msg", "I'm sorry, we couldn't find data you wanted");
-            return redirect(route("blogs.index"));
-        }
-        return view("blog.detail", compact("blog"));
-    }
-    /**
-     * show Blog create form
-     * 
-     * @return view
-     */
-    public function store(BlogRequest $request)
+    public function store(BlogRequest $request): RedirectResponse
     {
         $input = $request->all();
 
@@ -47,16 +34,42 @@ class BlogController extends Controller
         try{
             Blog::create($input);
             \DB::commit();
+            \Session::flash("err_msg", "We saved the blog.");
         }
         catch(\Thorwable $e){
             \DB::rollback();
             abort(500);
+            \Session::flash("err_msg", "We had some trouble.");
         }
-        \Session::flash("err_msg", "We saved the blog");
         return redirect(route("blogs.index"));
     }
+
     /**
-     * show Blog create form
+     * show Blog detail
+     * 
+     * @return view
+     */
+    public function edit(Blog $blog): View
+    {
+        return view("blogs.detail", [
+            "blog" => $blog
+        ]);
+    }
+
+    /**
+     * update form
+     * 
+     * @return view
+     */
+    public function update(BlogRequest $request, Blog $blog)
+    {
+        $input = $request->all();
+        $blog->update($input);
+        return redirect(route("blogs.index"));
+    }
+
+    /**
+     * delete item
      * 
      * @return view
      */
@@ -66,12 +79,13 @@ class BlogController extends Controller
         try{
             $blog->delete();
             \DB::commit();
+            \Session::flash("err_msg", "Successfully deleted the item.");
         }
         catch(\Thorwable $e){
             \DB::rollback();
             abort(500);
+            \Session::flash("err_msg", "Failed to delete the info.");
         }
-        \Session::flash("err_msg", "Failed to delete the info");
         return redirect(route("blogs.index"));
     }
 }
