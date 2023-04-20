@@ -10,7 +10,11 @@ use App\Models\Student;
 class Course extends Model
 {
     use HasFactory;
-
+    protected $table = "courses";
+    protected $fillable = [
+        "name"
+    ];
+    
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Students::class);
