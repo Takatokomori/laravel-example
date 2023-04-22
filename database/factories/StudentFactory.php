@@ -18,7 +18,7 @@ class StudentFactory extends Factory
     {
         return [
             //
-            "name" => fake()->name();
+            "name" => fake()->name()
         ];
     }
 }
