@@ -16,8 +16,7 @@ class CourseTableSeeder extends Seeder
     {
         //
         Course::factory()
-            ->has(Student::factory()->count(1))
-            ->count(20)
+            ->count(60)
             ->create();
     }
 }

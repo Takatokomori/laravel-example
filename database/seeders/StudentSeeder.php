@@ -16,6 +16,7 @@ class StudentSeeder extends Seeder
     {
         //
         Student::factory()
+            ->has(Course::factory()->count(3))
             ->count(20)
             ->create();
     }
