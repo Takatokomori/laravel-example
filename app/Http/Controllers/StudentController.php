@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\BlogRequest;
+use App\Http\Requests\StudentRequest;
 use App\Models\Student;
 use Illuminate\View\View;
 
@@ -20,19 +20,15 @@ class StudentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StudentRequest $request):RedirectResponse
     {
-        //
+        $student = new Student();
+        $student->name = $request->name;
+        Student::create($request->all());
+        return redirect(route("students.index"));
+
     }
 
     /**
@@ -56,9 +52,13 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BlogRequest $request, string $id)
+    public function update(StudentRequest $request, 
+                           Student $student): RedirectResponse
     {
-        
+        $student = Student::find($student->id);
+        $student->name = $request->name;
+        $student->save();
+        return redirect(route("students.index"));
     }
 
     /**
@@ -66,6 +66,16 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \DB::beginTransaction();
+        try{
+            $student = Student::find($id);
+            $student->delete();
+            \DB::commit();
+        }
+        catch(\Thorwable $e){
+            \DB::rollback();
+            abort(500);
+        }
+        return redirect(route("students.index"));
     }
 }

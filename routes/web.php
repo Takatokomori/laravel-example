@@ -29,8 +29,7 @@ Route::resource("blogs", BlogController::class)
 
 // Student
 Route::resource("students", StudentController::class)
-->only(["index", "store", "show",
-        "edit","update", "destroy"]);
+->only(["index", "store", "show", "edit", "update", "destroy"]);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

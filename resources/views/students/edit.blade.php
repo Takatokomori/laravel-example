@@ -2,7 +2,7 @@
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         <form method="POST" action="{{ route('students.update', $student) }}">
             @csrf
-            @method('patch')
+            @method('PATCH')
             <input
                 name="name"
                 class="block w-full border-gray-300 focus:border-indigo-300 
