@@ -48,8 +48,12 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $courses = Course::all();
-        dd($student->courses()->getRelated());
-        return view("students.edit", compact(["student", "courses"]));
+        $myCourseIds = $student->courses()
+                               ->pluck("course_id")
+                               ->toArray();
+
+        return view("students.edit",
+                    compact(["student", "courses", "myCourseIds"]));
     }
 
     /**
@@ -60,8 +64,9 @@ class StudentController extends Controller
     {
         $student = Student::find($student->id);
         $student->name = $request->name;
-        dd($request);
+        $student->courses()->sync($request->input("courseIds", []));
         $student->save();
+
         return redirect(route("students.index"));
     }
 
