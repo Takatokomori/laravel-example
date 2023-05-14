@@ -17,7 +17,10 @@ class StudentController extends Controller
     public function index(): View
     {
         $students = Student::with("courses")->get();
-        return view("students.index", compact("students"));
+        $courses = Course::all();
+
+        return view("students.index",
+                    compact(["students", "courses"]));
     }
 
     /**

@@ -13,11 +13,13 @@ class InputManyToManyCheckbox extends Component
      */
     public $things;
     public $myThingIds;
+    public string $inputName;
 
-    public function __construct($things, $myThingIds)
+    public function __construct($things, $myThingIds, $inputName)
     {
         $this->things = $things;
         $this->myThingIds = $myThingIds;
+        $this->inputName = $inputName;
     }
 
     /**
