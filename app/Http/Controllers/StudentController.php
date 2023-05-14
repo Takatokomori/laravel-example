@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StudentRequest;
 use App\Models\Student;
+use App\Models\Course;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -15,7 +16,7 @@ class StudentController extends Controller
      */
     public function index(): View
     {
-        $students = Student::all();
+        $students = Student::with("courses")->get();
         return view("students.index", compact("students"));
     }
 
@@ -46,7 +47,9 @@ class StudentController extends Controller
     public function edit(string $id): View
     {
         $student = Student::findOrFail($id);
-        return view("students.edit", compact("student"));
+        $courses = Course::all();
+        dd($student->courses()->getRelated());
+        return view("students.edit", compact(["student", "courses"]));
     }
 
     /**
@@ -57,6 +60,7 @@ class StudentController extends Controller
     {
         $student = Student::find($student->id);
         $student->name = $request->name;
+        dd($request);
         $student->save();
         return redirect(route("students.index"));
     }
@@ -69,6 +73,7 @@ class StudentController extends Controller
         \DB::beginTransaction();
         try{
             $student = Student::find($id);
+            $student->courses()->detach();
             $student->delete();
             \DB::commit();
         }
