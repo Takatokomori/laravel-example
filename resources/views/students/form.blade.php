@@ -8,7 +8,7 @@
             focus:border-indigo-300 
             focus:ring focus:ring-indigo-200 
             focus:ring-opacity-50 rounded-md shadow-sm"
-        >{{ old('name') }}</input>
+        >{{ old('name') }}
         @if ($errors->has('name'))
             <div class="text-danger bg-white">
                 {{ $errors->first('name') }}
