@@ -14,6 +14,8 @@
                 {{ $errors->first('name') }}
             </div>
         @endif
+        <x-forms.input-many-to-many-checkbox
+            :things="$courses" :my-thing-ids="$courses->toArray()" input-name='courseIds' />
         <x-primary-button class="mt-4">{{ __('Students') }}</x-primary-button>
     </form>
 </div>

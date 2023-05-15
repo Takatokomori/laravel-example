@@ -17,7 +17,10 @@ class StudentController extends Controller
     public function index(): View
     {
         $students = Student::with("courses")->get();
-        return view("students.index", compact("students"));
+        $courses = Course::all();
+
+        return view("students.index",
+                    compact(["students", "courses"]));
     }
 
     /**
@@ -25,9 +28,19 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request):RedirectResponse
     {
-        $student = new Student();
-        $student->name = $request->name;
-        Student::create($request->all());
+        \DB::beginTransaction();
+        try{
+            $student = new Student();
+            $student->name = $request->name;
+            $student->save();
+            $courseIds = $request->input("courseIds");
+            $student->courses()->attach($courseIds);
+            \DB::commit();
+        }
+        catch(\Thorwable $e){
+            \DB::rollback();
+            abort(500);
+        }
         return redirect(route("students.index"));
 
     }
@@ -62,11 +75,18 @@ class StudentController extends Controller
     public function update(StudentRequest $request, 
                            Student $student): RedirectResponse
     {
-        $student = Student::find($student->id);
-        $student->name = $request->name;
-        $student->courses()->sync($request->input("courseIds", []));
-        $student->save();
-
+        \DB::beginTransaction();
+        try{
+            $student = Student::find($student->id);
+            $student->name = $request->name;
+            $student->courses()->sync($request->input("courseIds", []));
+            $student->save();
+            \DB::commit();
+        }
+        catch(\Thorwable $e){
+            \DB::rollback();
+            abort(500);
+        }
         return redirect(route("students.index"));
     }
 

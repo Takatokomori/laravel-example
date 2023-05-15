@@ -17,9 +17,20 @@ class Student extends Model
         "name"
     ];
     
+    // relationship with courses
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class,
-                                    "course_student");
+                                    "course_student")
+                    ->withTimestamps();
+    }
+
+    // relationship with roles
+    public function roles(): BelongToMany
+    {
+        return $this->belongsToMany(Role::class,
+                            "region_student")
+                    ->withPivot('is_admin')
+                    ->withTimestamps();
     }
 }
