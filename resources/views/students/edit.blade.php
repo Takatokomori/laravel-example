@@ -11,14 +11,6 @@
                 value="{{ old('name', $student->name) }}"
             />
             <x-input-error :messages="$errors->get('message')" class="mt-2" />
-            {{-- @foreach($courses as $course)
-                <label class="text-white">
-                    <input type="checkbox" name="courseIds[]"
-                    value="{{ $course->id }}" {{ in_array($course->id,
-                        $myCourseIds, false) ? 'checked' : '' }}>
-                    {{ $course->name }}
-                </label>
-            @endforeach --}}
             <x-forms.input-many-to-many-checkbox
                 :things="$courses" :my-thing-ids="$myCourseIds" input-name='courseIds'/>
 
