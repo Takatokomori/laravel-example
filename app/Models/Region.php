@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Region extends Model
 {
@@ -16,11 +17,11 @@ class Region extends Model
     ];
 
     // relationship with students
-    public function students(): BelongToMany
+    public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class,
                         "region_student")
-                    ->withPivot('is_admin')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->withPivot('is_admin');
     }
 }
