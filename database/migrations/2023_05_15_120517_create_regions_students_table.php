@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('student_id');
+            $table->boolean("is_admin");
             $table->timestamps();
-
             
             // Define foreign key constraints
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
