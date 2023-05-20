@@ -19,7 +19,6 @@ class RegionFactory extends Factory
         return [
             //
             'name' => fake()->title(),
-            "is_admin" =>false,
         ];
     }
 }
