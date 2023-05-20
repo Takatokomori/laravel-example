@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\RegionController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,10 @@ Route::resource("blogs", BlogController::class)
 
 // Student
 Route::resource("students", StudentController::class)
+->only(["index", "store", "show", "edit", "update", "destroy"]);
+
+// Region
+Route::resource("regions", RegionController::class)
 ->only(["index", "store", "show", "edit", "update", "destroy"]);
 
 Route::get('/dashboard', function () {
