@@ -3,12 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class BlogFactory extends Factory
+class RegionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +18,8 @@ class BlogFactory extends Factory
     {
         return [
             //
-            "title" => fake()->title(),
-            "content" => Str::random(150),
+            'name' => fake()->title(),
+            "is_admin" =>false,
         ];
     }
 }
