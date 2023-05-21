@@ -22,7 +22,7 @@ class Region extends Model
         return $this->belongsToMany(Student::class,
                         "region_student")
                     ->withTimestamps()
-                    ->withPivot(['is_admin'])
+                    ->withPivot(['is_admin', 'price'])
                     ->withPivotValue('is_admin', false);
     }
 }

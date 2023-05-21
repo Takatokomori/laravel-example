@@ -31,6 +31,6 @@ class Student extends Model
         return $this->belongsToMany(Role::class,
                             "region_student")
                     ->withTimestamps()
-                    ->withPivot('is_admin');
+                    ->withPivot(['is_admin', 'price']);
     }
 }
