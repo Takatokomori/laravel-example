@@ -23,6 +23,7 @@ class Region extends Model
                         "region_student")
                     ->withTimestamps()
                     ->withPivot(['is_admin', 'price'])
-                    ->withPivotValue('is_admin', false);
+                    ->withPivotValue('is_admin', false)
+                    ->withPivotValue('price', 0);
     }
 }
