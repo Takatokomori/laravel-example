@@ -18,7 +18,7 @@ class RegionFactory extends Factory
     {
         return [
             //
-            'name' => fake()->title(),
+            'name' => fake()->unique()->company(),
         ];
     }
 }
