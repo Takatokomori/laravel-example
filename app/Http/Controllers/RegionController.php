@@ -59,44 +59,39 @@ class RegionController extends Controller
     {
         $region = Region::findOrFail($id);
         $students = Student::all();
-        $myStudentIds = $region->students()
-                            ->pluck('student_id')
-                            ->toArray();
+        $myStudentIds = $region->students()->pluck('student_id')->toArray();
         $myAdminStudentIds = $region->students()
-                            ->wherePivot('is_admin', false)
-                            ->pluck('student_id')
-                            ->toArray();
-        // Retrieve the students with prices for the region
-        $studentsForPirce = $region
-                                ->students()
-                                ->withPivot('price')
-                                ->get();
-        // Extract the prices from the pivot table
-        $prices = $studentsForPirce->pluck('pivot.price', 'id');
+            ->wherePivot('is_admin', false)
+            ->pluck('student_id')
+            ->toArray();
 
-        return view('regions.edit',
-                compact([
-                    'region', 'students'
-                    ,'myStudentIds', 'myAdminStudentIds',
-                    "prices"
-                ]));
+        // Retrieve the students with prices for the region
+        $studentsWithPrices = $region->students()
+            ->whereIn('student_id', $myStudentIds)
+            ->withPivot('price')
+            ->get();
+
+        // Extract the prices from the pivot table
+        $prices = $studentsWithPrices->pluck('pivot.price', 'pivot.student_id');
+        return view('regions.edit', compact('region', 'students', 'myStudentIds', 'myAdminStudentIds', 'prices'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(RegionRequest $request,
-                        Region $region): RedirectResponse
-    {
+    public function update(RegionRequest $request, Region $region): RedirectResponse
+{
     \DB::beginTransaction();
     try {
         // Validate the request
         $validatedData = $request->validated();
+        $region = Region::find($region->id);
         $region->name = $request->name;
-        $prices = $request->input('prices', []);
-        $studentIds = $request->input('studentIds', []);
 
+        $studentIds = $request->input('studentIds', []);
+        $prices = $request->input('prices', []);
         $studentsWithPrices = [];
+
         foreach ($studentIds as $studentId) {
             $price = $prices[$studentId] ?? null;
 
@@ -111,7 +106,6 @@ class RegionController extends Controller
         \DB::rollback();
         abort(500);
     }
-    
     return redirect(route("regions.index"));
 }
 

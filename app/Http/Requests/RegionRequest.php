@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegionRequest extends FormRequest
@@ -22,8 +22,11 @@ class RegionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required | string | max:155"
-            
+            "name" => "required|string|max:155",
+            'studentIds' => 'required|array',
+            'studentIds.*' => Rule::exists('students', 'id'),
+            'prices' => 'required|array',
+            'prices.*' => 'nullable|numeric|min:0',
         ];
     }
 }
