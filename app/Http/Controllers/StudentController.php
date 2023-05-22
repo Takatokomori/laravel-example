@@ -99,6 +99,7 @@ class StudentController extends Controller
         try{
             $student = Student::find($id);
             $student->courses()->detach();
+            $student->regions()->detach();
             $student->delete();
             \DB::commit();
         }
