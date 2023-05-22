@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BlogSeeder::class,
             StudentSeeder::class,
-            RegionSeeder::class
+            // RegionSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
 

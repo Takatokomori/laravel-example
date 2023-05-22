@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\StudentRequest;
+use App\Http\Requests\RegionRequest;
 use Illuminate\View\View;
 use App\Models\Student;
 use App\Models\Region;
@@ -23,7 +23,7 @@ class RegionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request): RedirectResponse
+    public function store(RegionRequest $request): RedirectResponse
     {
         \DB::beginTransaction();
         try
@@ -59,37 +59,55 @@ class RegionController extends Controller
     {
         $region = Region::findOrFail($id);
         $students = Student::all();
-        $myStudentIds = $region->students()
-                               ->pluck('student_id')
-                               ->toArray();
+        $myStudentIds = $region->students()->pluck('student_id')->toArray();
+        $myAdminStudentIds = $region->students()
+            ->wherePivot('is_admin', false)
+            ->pluck('student_id')
+            ->toArray();
 
-        return view('regions.edit',
-                compact([
-                    'region', 'students'
-                    ,'myStudentIds'
-                ]));
+        // Retrieve the students with prices for the region
+        $studentsWithPrices = $region->students()
+            ->whereIn('student_id', $myStudentIds)
+            ->withPivot('price')
+            ->get();
+
+        // Extract the prices from the pivot table
+        $prices = $studentsWithPrices->pluck('pivot.price', 'pivot.student_id');
+        return view('regions.edit', compact('region', 'students', 'myStudentIds', 'myAdminStudentIds', 'prices'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentRequest $request,
-                        Region $region): RedirectResponse
-    {
-        \DB::beginTransaction();
-        try{
-            $region = Region::find($region->id);
-            $region->name = $request->name;
-            $region->students()->sync($request->input("studentIds", []));
-            $region->save();
-            \DB::commit();
+    public function update(RegionRequest $request, Region $region): RedirectResponse
+{
+    \DB::beginTransaction();
+    try {
+        // Validate the request
+        $validatedData = $request->validated();
+        $region = Region::find($region->id);
+        $region->name = $request->name;
+
+        $studentIds = $request->input('studentIds', []);
+        $prices = $request->input('prices', []);
+        $studentsWithPrices = [];
+
+        foreach ($studentIds as $studentId) {
+            $price = $prices[$studentId] ?? null;
+
+            // Build the array of students with their prices
+            $studentsWithPrices[$studentId] = ['price' => $price];
         }
-        catch(\Thorwable $e){
-            \DB::rollback();
-            abort(500);
-        }
-        return redirect(route("regions.index"));
+
+        $region->students()->sync($studentsWithPrices);
+        $region->save();
+        \DB::commit();
+    } catch (\Throwable $e) {
+        \DB::rollback();
+        abort(500);
     }
+    return redirect(route("regions.index"));
+}
 
     /**
      * Remove the specified resource from storage.
