@@ -8,6 +8,14 @@
             @foreach ($student->courses as $course)
              <p class="text-sm text-blue-500">{{ $course->name }}</p>
             @endforeach
+            @foreach ($student->regions as $region)
+            <h2>Name</h2>
+             <p class="text-sm text-blue-500">{{ $region->name }}</p>
+            <h2>is_admin</h2>
+            <p class="text-sm text-blue-500">{{ $region->pivot->is_admin }}</p>
+            <h2>Price</h2>
+            <p class="text-sm text-blue-500">{{ $region->pivot->price }}</p>
+            @endforeach
         </div>
     </div>
 </div>

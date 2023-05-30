@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StudentRequest;
 use App\Models\Student;
 use App\Models\Course;
+use App\Models\Region;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -61,12 +62,18 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $courses = Course::all();
+        $regions = Region::all();
         $myCourseIds = $student->courses()
                                ->pluck("course_id")
                                ->toArray();
+        $myAdminStudentIds = $student->regions()
+                               ->wherePivot('is_admin', false)
+                               ->pluck('region_id')
+                               ->toArray();
 
         return view("students.edit",
-                    compact(["student", "courses", "myCourseIds"]));
+                    compact(["student", "courses",
+                    "regions", "myCourseIds", "myAdminStudentIds"]));
     }
 
     /**
@@ -99,6 +106,7 @@ class StudentController extends Controller
         try{
             $student = Student::find($id);
             $student->courses()->detach();
+            $student->regions()->detach();
             $student->delete();
             \DB::commit();
         }
