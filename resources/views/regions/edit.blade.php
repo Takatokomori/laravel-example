@@ -20,6 +20,7 @@
                 value="{{ old('name', $region->name) }}"
             />
             <x-input-error :messages="$errors->get('message')" class="mt-2" />
+            <h1 class="text-green-300">Students</h1>
             @foreach($students as $student)
             <label class="text-white">
                 <input type="checkbox" name="studentIds[]"

@@ -20,8 +20,10 @@
                 value="{{ old('name', $student->name) }}"
             />
             <x-input-error :messages="$errors->get('message')" class="mt-2" />
+            <h1 class="text-green-300">Courses</h1>
             <x-forms.input-many-to-many-checkbox
                 :things="$courses" :my-thing-ids="$myCourseIds" input-name='courseIds'/>
+            <h1 class="text-green-300">Regions</h1>
             @foreach($regions as $region)
             <label class="text-white">
                 <input type="checkbox" name="regionIds[]"
